@@ -35,20 +35,31 @@ function resolveDurations(decisions) {
   return duration;
 }
 
-export function simulate(input = {}) {
-  const decisions = Object.fromEntries(ACTIONS.map(a => [a.id, Boolean(input[a.id])]));
-  const durations = resolveDurations(decisions);
+/** Schedule from the current checkpoint, respecting finish-to-start dependencies.
+ * Throws on malformed networks rather than presenting invalid project forecasts. */
+export function calculateSchedule(tasks, durations, currentWeek = SCENARIO.currentWeek) {
+  const known = new Set(tasks.map(t => t.id));
+  if (known.size !== tasks.length) throw new Error('Duplicate task IDs in schedule');
+  const remaining = new Map(tasks.map(t => [t.id, t]));
   const rows = [];
   const byId = {};
-  for (const t of SCENARIO.tasks) {
-    const start = t.dependsOn.length ? Math.max(...t.dependsOn.map(d => byId[d].end)) : SCENARIO.currentWeek;
-    const end = start + durations[t.id];
-    const row = { ...t, duration: durations[t.id], start, end };
-    byId[t.id] = row;
-    rows.push(row);
+  while (remaining.size) {
+    let progressed = false;
+    for (const [id, task] of remaining) {
+      if (task.dependsOn.some(d => !known.has(d))) throw new Error(`Unknown predecessor for ${id}`);
+      if (task.dependsOn.some(d => !byId[d])) continue;
+      const duration = durations[id];
+      if (!Number.isFinite(duration) || duration <= 0) throw new Error(`Invalid duration for ${id}`);
+      const start = task.dependsOn.length ? Math.max(...task.dependsOn.map(d => byId[d].end)) : currentWeek;
+      const row = { ...task, duration, start, end: start + duration };
+      byId[id] = row;
+      rows.push(row);
+      remaining.delete(id);
+      progressed = true;
+    }
+    if (!progressed) throw new Error('Circular schedule dependencies');
   }
   const finishWeek = Math.max(...rows.map(t => t.end));
-  // CPM late-pass over the directed acyclic network; critical tasks have zero float.
   const successors = Object.fromEntries(rows.map(t => [t.id, rows.filter(r => r.dependsOn.includes(t.id)).map(r => r.id)]));
   const latestStart = {};
   for (const t of [...rows].reverse()) {
@@ -58,26 +69,38 @@ export function simulate(input = {}) {
     t.float = latestStart[t.id] - t.start;
     t.critical = t.float === 0;
   }
+  return { rows, finishWeek };
+}
+
+export function simulate(input = {}) {
+  const decisions = Object.fromEntries(ACTIONS.map(a => [a.id, Boolean(input[a.id])]));
+  const durations = resolveDurations(decisions);
+  const { rows, finishWeek } = calculateSchedule(SCENARIO.tasks, durations);
+  const initialDurations = Object.fromEntries(SCENARIO.tasks.map(t => [t.id, t.duration]));
+  const originalForecastWeek = calculateSchedule(SCENARIO.tasks, initialDurations).finishWeek;
   const estimatedBaseRemaining = SCENARIO.tasks.reduce((sum, t) => sum + t.cost, 0);
   const interventionCost = ACTIONS.reduce((sum, a) => sum + (decisions[a.id] ? a.extraCost : 0), 0);
   const estimateAtCompletion = SCENARIO.actualSpend + estimatedBaseRemaining + interventionCost;
   const budgetVariance = estimateAtCompletion - SCENARIO.authorizedBudget;
   const slipWeeks = Math.max(0, finishWeek - SCENARIO.baselineFinishWeek);
-  const recoveryWeeks = 43 - finishWeek;
-  const rag = slipWeeks > 4 || budgetVariance > SCENARIO.authorizedBudget * 0.1 ? 'RED' :
-    slipWeeks > 0 || budgetVariance > 0 ? 'AMBER' : 'GREEN';
+  const recoveryWeeks = originalForecastWeek - finishWeek;
   const qualityRisk = decisions.compressedUat ? 'HIGH' : decisions.phasedRelease ? 'ELEVATED' : 'CONTROLLED';
+  // High residual quality exposure is a release-governance blocker even if dates improve.
+  const rag = qualityRisk === 'HIGH' || slipWeeks > 4 || budgetVariance > SCENARIO.authorizedBudget * 0.1 ? 'RED' :
+    slipWeeks > 0 || budgetVariance > 0 || qualityRisk === 'ELEVATED' ? 'AMBER' : 'GREEN';
   const warnings = [];
   if (decisions.phasedRelease) warnings.push('Scope deferral requires product owner, sponsor, and any regulatory approval before baselining.');
   if (decisions.compressedUat) warnings.push('Shortening UAT increases residual defect risk; mandatory sign-offs and regulatory tests remain required.');
   if (decisions.integrationSwarm) warnings.push('Parallel engineering requires approved staffing and a viable work breakdown; additional people do not guarantee schedule savings.');
   if (decisions.vendorExpedite) warnings.push('Vendor acceleration is a proposal, not a commitment, until a revised delivery plan is formally accepted.');
   if (decisions.testAutomation) warnings.push('Automation can save execution time only when environments, data, and stable tests are available.');
+  if (decisions.compressedUat && decisions.phasedRelease) warnings.push('Combining scope deferral with compressed UAT compounds acceptance risk; obtain separate approval and verify critical business journeys.');
+  if (decisions.integrationSwarm && decisions.phasedRelease) warnings.push('Combined integration reductions depend on distinct work packages; verify reductions are not double-counted.');
   if (budgetVariance > 0) warnings.push('Estimate at completion exceeds the authorized budget; a funding decision or further replan is required.');
   if (slipWeeks > 0) warnings.push('The plan still misses the original baseline; do not claim the original release date is protected.');
   const recommendation = decisions.compressedUat ? 'Do not approve a compressed UAT window without a documented quality and business-risk exception.' :
     decisions.phasedRelease ? 'Request formal sponsor approval for phased scope, with acceptance criteria and a separate completion commitment.' :
     decisions.vendorExpedite || decisions.integrationSwarm || decisions.testAutomation ? 'Validate assumptions with accountable leads, secure commitments, and submit a change-controlled recovery plan.' :
     'Maintain RED status. Establish a verified integrated plan, resolve ownership, and present recovery options to the steering committee.';
-  return { decisions, rows, finishWeek, slipWeeks, recoveryWeeks, estimatedBaseRemaining, interventionCost, estimateAtCompletion, budgetVariance, rag, qualityRisk, warnings, recommendation, criticalPath: rows.filter(t => t.critical).map(t => t.name) };
+  return { decisions, rows, originalForecastWeek, finishWeek, slipWeeks, recoveryWeeks, estimatedBaseRemaining, interventionCost, estimateAtCompletion, budgetVariance, rag, qualityRisk, warnings, recommendation, criticalPath: rows.filter(t => t.critical).map(t => t.name) };
 }
