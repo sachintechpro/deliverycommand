@@ -147,41 +147,6 @@ flowchart TD
 
 </details>
 
-## Run locally
-
-**Requirements:** Python 3; Node.js **20+** for tests; a current web browser.
-
-From the directory containing `server.py`:
-
-```bash
-python server.py
-```
-
-Open **http://localhost:10000**. Set `PORT` to use a different port.
-
-Run the calculation engine tests:
-
-```bash
-node --test tests/*.test.mjs
-```
-
-> [!TIP]
-> This project does not require a database, credentials, or a paid API to explore the demonstration scenario.
-
-## Deploy on Render
-
-Create a new **Web Service** connected to this repository using these settings:
-
-| Setting | Configuration |
-|:--|:--|
-| Runtime | **Python 3** |
-| Build command | `echo "No dependencies"` |
-| Start command | `python server.py` |
-| Port | Provided by the `PORT` environment variable |
-| Root directory | Repository root, or the directory that contains `server.py` |
-
-Because the recovery calculations run client-side, the interface can also be hosted as a static website with suitable static-file configuration.
-
 ## Model assumptions & limitations
 
 > [!WARNING]
