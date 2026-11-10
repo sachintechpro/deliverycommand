@@ -1,0 +1,323 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DeliveryCommand — Enterprise Project Recovery Simulator</title><style>
+:root{color-scheme:light;--ink:#192b3c;--muted:#5d6b7a;--border:#dce4ee;--accent:#2457a7;--bg:#f3f6fa}
+*{box-sizing:border-box}body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);margin:0;line-height:1.62}
+main{background:#fff;max-width:1080px;margin:40px auto;padding:56px 68px;border:1px solid var(--border);border-radius:20px;box-shadow:0 20px 70px #223c6010}
+h1{font-size:2.8rem;line-height:1.13;letter-spacing:-.045em;margin:12px 0}h2{margin-top:44px;padding-bottom:12px;border-bottom:1px solid var(--border);font-size:1.5rem;letter-spacing:-.03em}h3{margin-top:28px;font-size:1.12rem}h1+h3{color:var(--muted);font-weight:500}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}table{border-collapse:collapse;width:100%;margin:20px 0;font-size:.94rem}th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}th{background:#eef3f9;color:#263d57}tr:nth-child(even) td{background:#fafcff}blockquote{background:#f1f6fd;border-left:4px solid var(--accent);padding:10px 20px;margin:20px 0;border-radius:0 9px 9px 0;color:#304b68}pre{background:#112235;color:#e4edf7;padding:18px 22px;border-radius:10px;overflow:auto}code{font-family:"SFMono-Regular",Consolas,monospace;font-size:.9em}p code,li code,td code{background:#edf2f7;border-radius:5px;padding:2px 5px;color:#234b79}hr{border:0;border-top:1px solid var(--border);margin:35px 0}details{border:1px solid var(--border);border-radius:10px;padding:12px 18px;margin:18px 0}summary{cursor:pointer;color:#214e84}img{max-width:100%}p{margin:14px 0}ul,ol{padding-left:26px}li{margin:5px 0}@media(max-width:700px){main{margin:0;padding:24px 20px;border-radius:0}h1{font-size:2.2rem}table{display:block;overflow-x:auto}}
+</style></head><body><main><div align="center">
+
+<h1>DeliveryCommand</h1>
+<h3>Enterprise Project Recovery Simulator</h3>
+<p><strong>Assess delivery challenges. Model recovery options. Make informed program decisions.</strong></p>
+<p><a href="#overview"><img src="https://img.shields.io/badge/Project-Enterprise%20Delivery-2457A7?style=for-the-badge" alt="Project Type" /></a>
+<a href="#business-scenario"><img src="https://img.shields.io/badge/Scenario-Insurance%20Modernization-0B7285?style=for-the-badge" alt="Scenario" /></a>
+<a href="#model-assumptions--limitations"><img src="https://img.shields.io/badge/Model-Deterministic-635FC7?style=for-the-badge" alt="Simulation" /></a></p>
+<p><strong><a href="#overview">Overview</a></strong> · <strong><a href="#business-scenario">Business scenario</a></strong> · <strong><a href="#using-deliverycommand">Explore the simulator</a></strong> · <strong><a href="#technical-architecture">Technical architecture</a></strong> · <strong><a href="#run-locally">Run locally</a></strong> · <strong><a href="#deploy-on-render">Deploy</a></strong></p>
+</div>
+
+<hr />
+<h2>Overview</h2>
+<p><strong>DeliveryCommand</strong> is an interactive enterprise project recovery simulation for analyzing schedule delays, delivery dependencies, budget pressure, and the trade-offs involved in corrective action.</p>
+<p>It models a fictional insurance technology modernization program. Users can review the delivery position, select interventions, recalculate the critical path and cost forecast, and export an executive recovery assessment.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Scenario transparency:</strong> Every project name, financial value, timeline, work package, and owner is fictional. The calculations are deterministic illustrations—not predictions, confidential client information, or a replacement for an approved integrated master schedule.</p>
+</blockquote>
+<h2>Business scenario</h2>
+<p>A cross-functional insurance technology modernization program involves external vendors, engineering, system integrations, System Integration Testing (SIT), User Acceptance Testing (UAT), and production cutover.</p>
+<p>At the current checkpoint, the program is <strong>10 weeks behind its approved finish date</strong>. Vendor dependencies and integration delays are affecting downstream delivery activities. The objective is to assess the evidence, identify the controlling path, and compare viable recovery strategies without hiding cost and risk exposure.</p>
+<h3>Initial delivery snapshot</h3>
+<table>
+<thead>
+<tr>
+  <th style="text-align:left">Delivery indicator</th>
+  <th style="text-align:right">Starting position</th>
+  <th style="text-align:left">Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left"><strong>Delivery health</strong></td>
+  <td style="text-align:right"><img src="https://img.shields.io/badge/RED-Critical-C92A2A?style=flat-square" alt="RED" /></td>
+  <td style="text-align:left">Recovery and executive oversight required</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Current checkpoint</strong></td>
+  <td style="text-align:right">Week <strong>20</strong></td>
+  <td style="text-align:left">Point at which recovery decisions begin</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Approved finish</strong></td>
+  <td style="text-align:right">Week <strong>33</strong></td>
+  <td style="text-align:left">Original delivery baseline</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Forecast finish</strong></td>
+  <td style="text-align:right">Week <strong>43</strong></td>
+  <td style="text-align:left">Unmitigated projection</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Schedule variance</strong></td>
+  <td style="text-align:right"><strong>+10 weeks</strong></td>
+  <td style="text-align:left">Forecast exceeds approved finish</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Approved budget</strong></td>
+  <td style="text-align:right"><strong>$4.00M</strong></td>
+  <td style="text-align:left">Financial baseline</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Actual spend</strong></td>
+  <td style="text-align:right"><strong>$2.70M</strong></td>
+  <td style="text-align:left">Spend to the checkpoint</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Base remaining forecast</strong></td>
+  <td style="text-align:right"><strong>$1.60M</strong></td>
+  <td style="text-align:left">Work still forecast to complete</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Estimate at completion</strong></td>
+  <td style="text-align:right"><strong>$4.30M</strong></td>
+  <td style="text-align:left">$2.70M actual + $1.60M remaining</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Forecast overrun</strong></td>
+  <td style="text-align:right"><strong>+$300K</strong></td>
+  <td style="text-align:left">Before recovery intervention costs/savings</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[!IMPORTANT]
+The original <strong>Week 33 finish and $4.00M budget remain the comparison baselines</strong> throughout the simulation. Recovery options do not silently reset them.</p>
+</blockquote>
+<h2>Using DeliveryCommand</h2>
+<h3>1. Diagnose the current position</h3>
+<p>Review schedule and budget indicators, delivery evidence, and the <strong>RAID register</strong> (Risks, Assumptions, Issues, Dependencies). Distinguish verified constraints from competing explanations.</p>
+<h3>2. Trace the controlling dependencies</h3>
+<p>Examine the illustrative chain:</p>
+<pre><code class="language-mermaid">flowchart LR
+    A[Vendor deliverables] --&gt; B[Integration]
+    B --&gt; C[System Integration Testing]
+    C --&gt; D[User Acceptance Testing]
+    D --&gt; E[Production cutover]
+</code></pre>
+<p>The engine recalculates earliest starts and finishes, task float, and the <strong>current critical path</strong> as interventions change activity durations.</p>
+<h3>3. Select recovery interventions</h3>
+<table>
+<thead>
+<tr>
+  <th style="text-align:left">Intervention</th>
+  <th style="text-align:left">Delivery lever</th>
+  <th style="text-align:left">Trade-off to examine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left"><strong>Vendor acceleration</strong></td>
+  <td style="text-align:left">Expedite upstream deliverables</td>
+  <td style="text-align:left">Vendor capacity and incremental cost</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Additional integration capacity</strong></td>
+  <td style="text-align:left">Address integration bottlenecks</td>
+  <td style="text-align:left">Staffing cost and coordination assumptions</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Targeted QA automation</strong></td>
+  <td style="text-align:left">Shorten suitable repeatable verification activities</td>
+  <td style="text-align:left">Automation investment and achievable coverage</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Phased delivery</strong></td>
+  <td style="text-align:left">Defer defined scope to a later release</td>
+  <td style="text-align:left">Scope approvals and residual obligations</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Compressed UAT</strong></td>
+  <td style="text-align:left">Reduce acceptance-testing duration</td>
+  <td style="text-align:left">Business readiness, defect escape and quality exposure</td>
+</tr>
+</tbody>
+</table>
+<p>Selections can be combined. A recovery action only improves the overall finish forecast when it affects activities that constrain completion.</p>
+<h3>4. Compare the revised forecast</h3>
+<p>Inspect the updated <strong>completion week</strong>, <strong>remaining variance</strong>, <strong>critical path</strong>, <strong>estimate at completion (EAC)</strong>, <strong>budget gap</strong>, and <strong>quality/governance warnings</strong>. Faster is not automatically better if the revised approach creates unacceptable costs or risks.</p>
+<h3>5. Export the decision record</h3>
+<p>Generate an <strong>executive recovery brief</strong> or export scenario data as <strong>JSON</strong>. The output summarizes selected interventions, modeled impacts, residual exposure, and recommended management follow-up.</p>
+<details>
+<summary><strong>Suggested five-minute exploration</strong></summary>
+
+<ol>
+<li>Note the initial RED status, Week 43 finish, and $4.30M EAC.</li>
+<li>Review the RAID register and identify upstream constraints.</li>
+<li>Enable vendor acceleration and inspect whether the controlling path changes.</li>
+<li>Compare phased delivery and compressed UAT, paying attention to approval and quality warnings.</li>
+<li>Combine options, review the financial consequences, and export the executive brief.</li>
+</ol>
+</details>
+
+<hr />
+<h2>Decision-making principles</h2>
+<table>
+<thead>
+<tr>
+  <th style="text-align:left">Principle</th>
+  <th style="text-align:left">How the simulation applies it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left"><strong>Evidence before blame</strong></td>
+  <td style="text-align:left">Review schedule facts, issues, and dependencies before assigning corrective actions</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Critical-path discipline</strong></td>
+  <td style="text-align:left">Focus on activities that actually constrain overall completion</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Financial transparency</strong></td>
+  <td style="text-align:left">Show schedule gains alongside intervention costs and EAC changes</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Risk-based delivery</strong></td>
+  <td style="text-align:left">Surface consequences of accelerated work, scope deferral, and compressed testing</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Accountability and governance</strong></td>
+  <td style="text-align:left">Make ownership, approvals, escalation, and follow-up part of the recovery discussion</td>
+</tr>
+<tr>
+  <td style="text-align:left"><strong>Baseline integrity</strong></td>
+  <td style="text-align:left">Compare forecasts with the approved original commitments</td>
+</tr>
+</tbody>
+</table>
+<h2>Technical architecture</h2>
+<p>The application separates deterministic scheduling/financial logic from the browser interface and lightweight server.</p>
+<pre><code class="language-mermaid">flowchart TD
+    UI[Browser UI&lt;br/&gt;index.html + styles.css] --&gt; APP[Interaction layer&lt;br/&gt;app.mjs]
+    APP --&gt; ENGINE[Schedule and cost engine&lt;br/&gt;engine.mjs]
+    APP --&gt; REPORT[Executive brief / JSON export]
+    TEST[Node test suite&lt;br/&gt;tests/engine.test.mjs] --&gt; ENGINE
+    SERVER[Python web server&lt;br/&gt;server.py] --&gt; UI
+</code></pre>
+<table>
+<thead>
+<tr>
+  <th style="text-align:left">File</th>
+  <th style="text-align:left">Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left"><a href="engine.mjs"><code>engine.mjs</code></a></td>
+  <td style="text-align:left">Dependency scheduling, earliest/latest passes, float, critical path, schedule variance, costs, and warnings</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href="app.mjs"><code>app.mjs</code></a></td>
+  <td style="text-align:left">State, interactive scenario selection, visual updates, and report export</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href="index.html"><code>index.html</code></a></td>
+  <td style="text-align:left">Accessible application markup</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href="styles.css"><code>styles.css</code></a></td>
+  <td style="text-align:left">Responsive presentation</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href="server.py"><code>server.py</code></a></td>
+  <td style="text-align:left">Minimal Python HTTP server with no third-party Python dependencies</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href="tests/engine.test.mjs"><code>tests/engine.test.mjs</code></a></td>
+  <td style="text-align:left">Node built-in tests covering model behavior and all <strong>32 combinations</strong> of five interventions</td>
+</tr>
+<tr>
+  <td style="text-align:left"><a href=".github/workflows/test.yml"><code>.github/workflows/test.yml</code></a></td>
+  <td style="text-align:left">CI test execution, when this workflow is included in the repository</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary><strong>How the model works</strong></summary>
+
+<ul>
+<li><strong>Schedule:</strong> Builds a finish-to-start dependency graph, calculates earliest start/finish, performs a late pass, derives float, and identifies critical activities.</li>
+<li><strong>Recovery choices:</strong> Applies modeled changes to activity durations, cost assumptions, and defined scope savings.</li>
+<li><strong>Financial forecast:</strong> Combines current actuals, base forecast to complete, and intervention cost/savings assumptions.</li>
+<li><strong>Governance:</strong> Produces warnings for choices that increase risk or require formal approval.</li>
+<li><strong>Regression tests:</strong> Evaluate the complete 2⁵ = 32 intervention selection space.</li>
+</ul>
+</details>
+
+<h2>Run locally</h2>
+<p><strong>Requirements:</strong> Python 3; Node.js <strong>20+</strong> for tests; a current web browser.</p>
+<p>From the directory containing <code>server.py</code>:</p>
+<pre><code class="language-bash">python server.py
+</code></pre>
+<p>Open <strong><a href="http://localhost:10000">http://localhost:10000</a></strong>. Set <code>PORT</code> to use a different port.</p>
+<p>Run the calculation engine tests:</p>
+<pre><code class="language-bash">node --test tests/*.test.mjs
+</code></pre>
+<blockquote>
+<p>[!TIP]
+This project does not require a database, credentials, or a paid API to explore the demonstration scenario.</p>
+</blockquote>
+<h2>Deploy on Render</h2>
+<p>Create a new <strong>Web Service</strong> connected to this repository using these settings:</p>
+<table>
+<thead>
+<tr>
+  <th style="text-align:left">Setting</th>
+  <th style="text-align:left">Configuration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="text-align:left">Runtime</td>
+  <td style="text-align:left"><strong>Python 3</strong></td>
+</tr>
+<tr>
+  <td style="text-align:left">Build command</td>
+  <td style="text-align:left"><code>echo &quot;No dependencies&quot;</code></td>
+</tr>
+<tr>
+  <td style="text-align:left">Start command</td>
+  <td style="text-align:left"><code>python server.py</code></td>
+</tr>
+<tr>
+  <td style="text-align:left">Port</td>
+  <td style="text-align:left">Provided by the <code>PORT</code> environment variable</td>
+</tr>
+<tr>
+  <td style="text-align:left">Root directory</td>
+  <td style="text-align:left">Repository root, or the directory that contains <code>server.py</code></td>
+</tr>
+</tbody>
+</table>
+<p>Because the recovery calculations run client-side, the interface can also be hosted as a static website with suitable static-file configuration.</p>
+<h2>Model assumptions &amp; limitations</h2>
+<blockquote>
+<p>[!WARNING]
+<strong>Illustrative decision support only.</strong> Actual program recovery requires verified work estimates, resource availability, governance approval, contractual constraints, and stakeholder sign-off.</p>
+</blockquote>
+<ul>
+<li>The base remaining-work estimate is held constant except for explicitly modeled intervention expenses or scope savings.</li>
+<li>The current version does <strong>not</strong> simulate stochastic schedule uncertainty, resource calendars, productivity curves, regulatory review durations, or competing assignments for shared resources.</li>
+<li>Recovery actions are assumptions for scenario exploration—not guaranteed reductions in elapsed time.</li>
+<li>RAG thresholds are defined for this demonstration, not presented as an industry-wide or organizational standard.</li>
+<li>Schedule and financial impacts are always measured against the <strong>original approved baseline</strong>.</li>
+</ul>
+<h2>Potential enhancements</h2>
+<p>Resource capacity modeling · Saved scenario comparison · Probabilistic schedule forecasts · Milestone baseline history · Vendor delivery performance · Audit trails · Configurable governance and approval rules.</p>
+<p><sub>These are possible future enhancements and are not represented as current features.</sub></p>
+<hr />
+<div align="center">
+
+<p><strong>DeliveryCommand</strong> · Enterprise delivery diagnostics, recovery simulation, and decision support</p>
+<p><sub>Independent fictional project · No confidential organizational or client information</sub></p>
+</div>
+
+</main></body></html>
