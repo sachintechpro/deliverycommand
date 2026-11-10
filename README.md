@@ -12,8 +12,6 @@
 
 ### [▶ Launch Live Simulator](https://deliverycommand.onrender.com)
 
-[**Open DeliveryCommand on Render**](https://deliverycommand.onrender.com) · [**View Source Code**](https://github.com/sachintechpro/deliverycommand)
-
 **[Overview](#overview)** · **[Business scenario](#business-scenario)** · **[How to use](#using-deliverycommand)** · **[Technical architecture](#technical-architecture)** · **[Limitations](#model-assumptions--limitations)**
 
 </div>
