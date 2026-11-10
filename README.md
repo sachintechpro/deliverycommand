@@ -10,7 +10,11 @@
 [![Scenario](https://img.shields.io/badge/Scenario-Insurance%20Modernization-0B7285?style=for-the-badge)](#business-scenario)
 [![Simulation](https://img.shields.io/badge/Model-Deterministic-635FC7?style=for-the-badge)](#model-assumptions--limitations)
 
-**[Overview](#overview)** · **[Business scenario](#business-scenario)** · **[Launch Live Simulator](https://deliverycommand.onrender.com)** · **[Technical architecture](#technical-architecture)** · **[Deploy](#deploy-on-render)**
+### [▶ Launch Live Simulator](https://deliverycommand.onrender.com)
+
+[**Open DeliveryCommand on Render**](https://deliverycommand.onrender.com) · [**View Source Code**](https://github.com/sachintechpro/deliverycommand)
+
+**[Overview](#overview)** · **[Business scenario](#business-scenario)** · **[How to use](#using-deliverycommand)** · **[Technical architecture](#technical-architecture)** · **[Limitations](#model-assumptions--limitations)**
 
 </div>
 
@@ -24,6 +28,17 @@ It models a fictional insurance technology modernization program. Users can revi
 
 > [!NOTE]
 > **Scenario transparency:** Every project name, financial value, timeline, work package, and owner is fictional. The calculations are deterministic illustrations—not predictions, confidential client information, or a replacement for an approved integrated master schedule.
+
+## Access the live application
+
+**No installation, account, or local setup is required.** Open the application directly in a web browser:
+
+### **[https://deliverycommand.onrender.com](https://deliverycommand.onrender.com)**
+
+Use the navigation sections within the application to review project evidence, select recovery actions, inspect the recalculated delivery forecast, and export a recovery assessment.
+
+> [!TIP]
+> The hosted service may take a moment to respond after a period of inactivity.
 
 ## Business scenario
 
@@ -50,6 +65,8 @@ At the current checkpoint, the program is **10 weeks behind its approved finish 
 > The original **Week 33 finish and $4.00M budget remain the comparison baselines** throughout the simulation. Recovery options do not silently reset them.
 
 ## Using DeliveryCommand
+
+Start by opening the **[live simulator](https://deliverycommand.onrender.com)**.
 
 ### 1. Diagnose the current position
 
@@ -119,22 +136,21 @@ The application separates deterministic scheduling/financial logic from the brow
 
 ```mermaid
 flowchart TD
-    UI[Browser UI<br/>index.html + styles.css] --> APP[Interaction layer<br/>app.mjs]
-    APP --> ENGINE[Schedule and cost engine<br/>engine.mjs]
-    APP --> REPORT[Executive brief / JSON export]
-    TEST[Node test suite<br/>tests/engine.test.mjs] --> ENGINE
-    SERVER[Python web server<br/>server.py] --> UI
+    UI["Browser UI: index.html + styles.css"] --> APP["Interaction layer: app.mjs"]
+    APP --> ENGINE["Schedule and cost engine: engine.mjs"]
+    APP --> REPORT["Executive brief / JSON export"]
+    TEST["Node test suite: tests/engine.test.mjs"] --> ENGINE
+    SERVER["Python web server: server.py"] --> UI
 ```
 
 | File | Responsibility |
 |:--|:--|
-| [`engine.mjs`](engine.mjs) | Dependency scheduling, earliest/latest passes, float, critical path, schedule variance, costs, and warnings |
-| [`app.mjs`](app.mjs) | State, interactive scenario selection, visual updates, and report export |
-| [`index.html`](index.html) | Accessible application markup |
-| [`styles.css`](styles.css) | Responsive presentation |
-| [`server.py`](server.py) | Minimal Python HTTP server with no third-party Python dependencies |
-| [`tests/engine.test.mjs`](tests/engine.test.mjs) | Node built-in tests covering model behavior and all **32 combinations** of five interventions |
-| [`.github/workflows/test.yml`](.github/workflows/test.yml) | CI test execution, when this workflow is included in the repository |
+| [`engine.mjs`](deliverycommand/engine.mjs) | Dependency scheduling, earliest/latest passes, float, critical path, schedule variance, costs, and warnings |
+| [`app.mjs`](deliverycommand/app.mjs) | State, interactive scenario selection, visual updates, and report export |
+| [`index.html`](deliverycommand/index.html) | Application markup |
+| [`styles.css`](deliverycommand/styles.css) | Responsive presentation |
+| [`server.py`](deliverycommand/server.py) | Lightweight Python HTTP server |
+| [`tests/engine.test.mjs`](deliverycommand/tests/engine.test.mjs) | Automated model checks covering all **32 combinations** of five interventions |
 
 <details>
 <summary><strong>How the model works</strong></summary>
@@ -155,7 +171,7 @@ flowchart TD
 - The base remaining-work estimate is held constant except for explicitly modeled intervention expenses or scope savings.
 - The current version does **not** simulate stochastic schedule uncertainty, resource calendars, productivity curves, regulatory review durations, or competing assignments for shared resources.
 - Recovery actions are assumptions for scenario exploration—not guaranteed reductions in elapsed time.
-- RAG thresholds are defined for this demonstration, not presented as an industry-wide or organizational standard.
+- RAG thresholds are defined for this simulation, not presented as an industry-wide or organizational standard.
 - Schedule and financial impacts are always measured against the **original approved baseline**.
 
 ## Potential enhancements
@@ -167,6 +183,8 @@ Resource capacity modeling · Saved scenario comparison · Probabilistic schedul
 ---
 
 <div align="center">
+
+**[Launch DeliveryCommand](https://deliverycommand.onrender.com)**
 
 **DeliveryCommand** · Enterprise delivery diagnostics, recovery simulation, and decision support
 
