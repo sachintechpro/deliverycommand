@@ -10,7 +10,7 @@
 [![Scenario](https://img.shields.io/badge/Scenario-Insurance%20Modernization-0B7285?style=for-the-badge)](#business-scenario)
 [![Simulation](https://img.shields.io/badge/Model-Deterministic-635FC7?style=for-the-badge)](#model-assumptions--limitations)
 
-**[Overview](#overview)** · **[Business scenario](#business-scenario)** · **[Explore the simulator](#using-deliverycommand)** · **[Technical architecture](#technical-architecture)** · **[Run locally](#run-locally)** · **[Deploy](#deploy-on-render)**
+**[Overview](#overview)** · **[Business scenario](#business-scenario)** · **[Explore the simulator](#using-deliverycommand)** · **[Technical architecture](#technical-architecture)** · **[Deploy](#deploy-on-render)**
 
 </div>
 
