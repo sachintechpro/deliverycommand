@@ -32,7 +32,8 @@ test('Manual cases have steps, expected behavior and requirement traceability',(
   assert.ok(uniq(app.cases.map(x=>x.id)));
   for(const c of app.cases){
     assert.ok(valid.has(c.req),c.id);
-    for(const k of ['title','pre','steps','expected','level','priority'])assert.ok(c[k]&&String(c[k]).length>5,c.id+' '+k);
+    for(const k of ['title','pre','steps','expected','level'])assert.ok(c[k]&&String(c[k]).length>5,c.id+' '+k);
+    assert.ok(['P0','P1','P2'].includes(c.priority),c.id+' priority');
     assert.ok(c.steps.split('\n').length>=4,c.id);
   }
 });
