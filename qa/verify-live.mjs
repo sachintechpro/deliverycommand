@@ -34,17 +34,15 @@ async function check([name, url, configName]) {
     return {name,status:"NOT VERIFIED",error:String(err.message).slice(0,170),url};
   }
 }
-for(let round=1;round<=5;round++){
+for(let round=1;round<=3;round++){
   const pending=targets.filter(t=>results.get(t[0])?.status!=="LIVE");
   if(!pending.length) break;
   console.log("Deployment verification round "+round+" — "+pending.length+" remaining");
-  // Bound concurrent checks to avoid waking too many Render free services at once.
-  for(let k=0;k<pending.length;k+=4){
-    const checked=await Promise.all(pending.slice(k,k+4).map(check));
-    for(const r of checked){results.set(r.name,r);console.log(JSON.stringify(r));}
-  }
+  // Verify independent Render services in parallel; each check is a safe GET.
+  const checked=await Promise.all(pending.map(check));
+  for(const r of checked){results.set(r.name,r);console.log(JSON.stringify(r));}
   if([...results.values()].every(x=>x.status==="LIVE"))break;
-  if(round<5)await sleep(20000);
+  if(round<3)await sleep(10000);
 }
 const list=targets.map(t=>results.get(t[0])||{name:t[0],status:"NOT VERIFIED",error:"No result"});
 console.log("\nFINAL RESULT\n"+JSON.stringify(list,null,2));
